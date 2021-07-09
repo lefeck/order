@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package go.micro.service.order;
+option go_package ="proto/order";
+
+service Order {
+	//通过订单id，获取订单信息
+	rpc GetOrderByID(OrderID) returns (OrderInfo) {}
+	//获取所有订单
+	rpc GetAllOrder(AllOrderRequest) returns (AllOrder) {}
+	//创建订单
+	rpc CreateOrder(OrderInfo) returns (OrderID){}
+	//删除订单
+	rpc DeleteOrderByID(OrderID)returns (Response){}
+	//更新订单支付状态
+	rpc UpdateOrderPayStatus(PayStatus) returns(Response) {}
+	//更新订单发货状态
+	rpc UpdateOrderShippStatus(ShippStatus) returns(Response){}
+	//更新订单
+	rpc UpdateOrder(OrderInfo)returns(Response){}
+
+}
+message AllOrderRequest {
+
+}
+message AllOrder {
+	repeated OrderInfo order_info =1;
+}
+
+message OrderID {
+	int64 order_id = 1;
+}
+
+message OrderInfo {
+	int64 id =1;
+	int32  pay_status =2;
+	//发货状态
+	int32  shipp_status =3;
+	double  price =4;
+	repeated OrderDetail order_detail=5;
+}
+//订单详情
+message OrderDetail {
+	int64 id =1;
+	int64 product_id =2;
+	int64 product_num =3;
+	int64 product_size_id= 4;
+	int64 product_price=5;
+	int64 order_id = 6;
+}
+
+message PayStatus {
+	int64 order_id =1;
+	int32 pay_status =2;
+}
+
+message ShippStatus {
+	int64 order_id = 1;
+	int32 shipp_status=2;
+}
+
+message Response {
+	string msg = 1;
+}
+
